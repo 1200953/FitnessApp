@@ -7,6 +7,7 @@ package assg1.service;
 
 import assg1.Consumptiontable;
 import assg1.Foodtable;
+import assg1.Usertable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -123,6 +124,7 @@ public class ConsumptiontableFacadeREST extends AbstractFacade<Consumptiontable>
         query.setParameter("foodname", foodname);
         return query.getResultList();
     }
+    
     
     @GET
     @Path("{from}/{to}")

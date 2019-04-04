@@ -8,6 +8,11 @@ package assg1.service;
 import assg1.Usertable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -190,6 +195,42 @@ public class UsertableFacadeREST extends AbstractFacade<Usertable> {
         query.setParameter("stepspermile", stepspermile);
         return query.getResultList();
     }
+   
+    @GET
+    @Path("CalCbps/{id}")
+    @Produces({"application/json"})
+    public String CalCbps( @PathParam("id") Integer id) {
+        TypedQuery<Usertable> q = em.createQuery("SELECT u FROM Usertable u WHERE u.id = :id", Usertable.class);
+        q.setParameter("id", id);
+        Double cbps = 0.0;
+        Usertable u = new Usertable();
+        u = q.getResultList().get(0);
+        cbps = (u.getWeight() * 0.49) / u.getStepspermile();
+        return String.valueOf(cbps);
+    }
+    
+    @GET
+    @Path("CalBmr/{id}")
+    @Produces({"application/json"})
+    public String CalBmr( @PathParam("id") Integer id) {
+        TypedQuery<Usertable> q = em.createQuery("SELECT u FROM Usertable u WHERE u.id = :id", Usertable.class);
+        q.setParameter("id", id);
+        Double bmr = 0.0;
+        Usertable u = new Usertable();
+        u = q.getResultList().get(0);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(u.getDob());
+        int year = cal.get(Calendar.YEAR);
+        int curyear = Calendar.getInstance().get(Calendar.YEAR);
+        int age = curyear - year;
+        if(u.getGender().equals("M"))
+            bmr = 13.75 * u.getWeight() / 2.2046 + 5.003 * u.getHeight() - 6.755 * age + 66.5;
+        else
+            bmr = 9.563 * u.getWeight() / 2.2046 + 1.85 * u.getHeight() - 4.476 * age + 655.1;
+        
+        return String.valueOf(bmr);
+    }
+    
     
     @GET
     @Override
@@ -216,5 +257,7 @@ public class UsertableFacadeREST extends AbstractFacade<Usertable> {
     protected EntityManager getEntityManager() {
         return em;
     }
+    
+    
     
 }
