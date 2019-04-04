@@ -227,8 +227,37 @@ public class UsertableFacadeREST extends AbstractFacade<Usertable> {
             bmr = 13.75 * u.getWeight() / 2.2046 + 5.003 * u.getHeight() - 6.755 * age + 66.5;
         else
             bmr = 9.563 * u.getWeight() / 2.2046 + 1.85 * u.getHeight() - 4.476 * age + 655.1;
-        
         return String.valueOf(bmr);
+    }
+    
+    @GET
+    @Path("CalDayCal/{id}")
+    @Produces({"application/json"})
+    public String CalDayCal( @PathParam("id") Integer id) {
+        TypedQuery<Usertable> q = em.createQuery("SELECT u FROM Usertable u WHERE u.id = :id", Usertable.class);
+        q.setParameter("id", id);
+        Usertable u = new Usertable();
+        u = q.getResultList().get(0);
+        Double totalCal = 0.0;
+        Double bmr = Double.parseDouble(CalBmr(id));
+        switch(u.getLeveloffactivity()){
+            case 1:
+                totalCal = bmr * 1.2;
+                break;
+            case 2:
+                totalCal = bmr * 1.375;
+                break;
+            case 3:
+                totalCal = bmr * 1.55;
+                break;
+            case 4:
+                totalCal = bmr * 1.725;
+                break;
+            case 5:
+                totalCal = bmr * 1.9;
+                break;
+        }
+        return String.valueOf(totalCal);
     }
     
     
