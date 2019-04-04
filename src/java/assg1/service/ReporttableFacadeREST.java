@@ -14,6 +14,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -112,6 +113,49 @@ public class ReporttableFacadeREST extends AbstractFacade<Reporttable> {
         Query query = em.createNamedQuery("Reporttable.findByCalgoal");
         query.setParameter("calgoal", calgoal);
         return query.getResultList();
+    }
+    
+    @GET
+    @Path("getDayReport/{userid}/{rdate}")
+    @Produces({"application/json"})
+    public String getDayReport( @PathParam("userid") Integer userid, @PathParam("rdate") String rdate) throws ParseException {
+        TypedQuery<Reporttable> q = em.createQuery("SELECT c FROM Reporttable c WHERE c.userid.id = :userid AND c.rdate = :rdate", Reporttable.class);
+        q.setParameter("userid", userid);
+        Date rdate2=new SimpleDateFormat("yyyy-MM-dd").parse(rdate);
+        q.setParameter("rdate", rdate2);
+        Reporttable r = new Reporttable();
+        r = q.getResultList().get(0);
+        Integer calConsumed = r.getCalconsumed();
+        Integer calBurned =r.getCalburned();
+        Integer calRemain = r.getCalgoal() - calBurned - calConsumed;
+        
+        return "Calories consumed:" + calConsumed +
+               "\nCalories burned:" + calBurned +
+               "\nCaloreis remain:" + calRemain;    
+    }
+    
+    @GET
+    @Path("getPeriodReport/{userid}/{sdate}/{edate}")
+    @Produces({"application/json"})
+    public String getPeriodReport( @PathParam("userid") Integer userid, @PathParam("sdate") String sdate, @PathParam("edate")  String edate) throws ParseException {
+        TypedQuery<Reporttable> q = em.createQuery("SELECT c FROM Reporttable c WHERE c.userid.id = :userid AND (c.rdate BETWEEN :sdate AND :edate)", Reporttable.class);
+        q.setParameter("userid", userid);
+        Date sdate2=new SimpleDateFormat("yyyy-MM-dd").parse(sdate);
+        q.setParameter("sdate", sdate2);
+        Date edate2=new SimpleDateFormat("yyyy-MM-dd").parse(edate);
+        q.setParameter("edate", edate2);
+        Integer totalBurned = 0;
+        Integer totalConsumed = 0;
+        Integer stepsTaken = 0;
+        
+        for(Reporttable r : q.getResultList()){
+            totalBurned += r.getCalburned();
+            totalConsumed += r.getCalconsumed();
+            stepsTaken += r.getStepstaken();
+        }     
+        return "Calories consumed:" + totalConsumed +
+               "\nCalories burned:" + totalBurned +
+               "\nSteps taken:" + stepsTaken;    
     }
     
     @GET
