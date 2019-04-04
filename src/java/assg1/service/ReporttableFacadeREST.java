@@ -60,6 +60,15 @@ public class ReporttableFacadeREST extends AbstractFacade<Reporttable> {
     }
 
     @GET
+    @Path("findByUserId/{userid}")
+    @Produces({"application/json"})
+    public List<Reporttable> findByUserId(@PathParam("userid") Integer userid) {
+        Query query = em.createNamedQuery("Reporttable.findByUserId");
+        query.setParameter("userid", userid);
+        return query.getResultList();
+    }
+    
+    @GET
     @Path("findByRdate/{rdate}")
     @Produces({"application/json"})
     public List<Reporttable> findByRdate(@PathParam("rdate") String rdatestr) throws ParseException {
