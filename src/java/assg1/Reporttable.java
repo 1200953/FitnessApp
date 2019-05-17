@@ -8,6 +8,7 @@ package assg1;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -31,6 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Reporttable.findAll", query = "SELECT r FROM Reporttable r")
     , @NamedQuery(name = "Reporttable.findById", query = "SELECT r FROM Reporttable r WHERE r.id = :id")
+    , @NamedQuery(name = "Reporttable.findByUserId", query = "SELECT r FROM Reporttable r WHERE r.userid.id = :userid")
     , @NamedQuery(name = "Reporttable.findByRdate", query = "SELECT r FROM Reporttable r WHERE r.rdate = :rdate")
     , @NamedQuery(name = "Reporttable.findByCalconsumed", query = "SELECT r FROM Reporttable r WHERE r.calconsumed = :calconsumed")
     , @NamedQuery(name = "Reporttable.findByCalburned", query = "SELECT r FROM Reporttable r WHERE r.calburned = :calburned")

@@ -260,7 +260,6 @@ public class UsertableFacadeREST extends AbstractFacade<Usertable> {
         return String.valueOf(totalCal);
     }
     
-    
     @GET
     @Override
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})

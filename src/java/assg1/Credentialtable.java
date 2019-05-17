@@ -7,6 +7,7 @@ package assg1;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,8 +19,13 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.TypedQuery;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -32,6 +38,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Credentialtable.findAll", query = "SELECT c FROM Credentialtable c")
     , @NamedQuery(name = "Credentialtable.findById", query = "SELECT c FROM Credentialtable c WHERE c.id = :id")
+    , @NamedQuery(name = "Credentialtable.findByUserId", query = "SELECT c FROM Credentialtable c WHERE c.userid.id = :userid")
     , @NamedQuery(name = "Credentialtable.findByUsername", query = "SELECT c FROM Credentialtable c WHERE c.username = :username")
     , @NamedQuery(name = "Credentialtable.findByPasswdhash", query = "SELECT c FROM Credentialtable c WHERE c.passwdhash = :passwdhash")
     , @NamedQuery(name = "Credentialtable.findBySignupdate", query = "SELECT c FROM Credentialtable c WHERE c.signupdate = :signupdate")})
@@ -127,5 +134,7 @@ public class Credentialtable implements Serializable {
     public String toString() {
         return "assg1.Credentialtable[ id=" + id + " ]";
     }
+    
+    
     
 }

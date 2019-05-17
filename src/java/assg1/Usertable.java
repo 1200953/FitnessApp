@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -82,11 +83,11 @@ public class Usertable implements Serializable {
     private Integer leveloffactivity;
     @Column(name = "STEPSPERMILE")
     private Integer stepspermile;
-    @OneToMany(mappedBy = "userid")
+    @OneToMany(mappedBy = "userid",cascade = CascadeType.PERSIST)
     private Collection<Consumptiontable> consumptiontableCollection;
-    @OneToMany(mappedBy = "userid")
+    @OneToMany(mappedBy = "userid",cascade = CascadeType.PERSIST)
     private Collection<Reporttable> reporttableCollection;
-    @OneToMany(mappedBy = "userid")
+    @OneToMany(mappedBy = "userid",cascade = CascadeType.PERSIST)
     private Collection<Credentialtable> credentialtableCollection;
 
     public Usertable() {

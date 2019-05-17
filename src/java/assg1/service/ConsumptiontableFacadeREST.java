@@ -106,6 +106,24 @@ public class ConsumptiontableFacadeREST extends AbstractFacade<Consumptiontable>
     }
 
     @GET
+    @Path("findByFoodid/{foodid}")
+    @Produces({"application/json"})
+    public List<Consumptiontable> findByFoodid(@PathParam("foodid") Integer foodid) {
+        Query query = em.createNamedQuery("Consumptiontable.findByFoodid");
+        query.setParameter("foodid", foodid);
+        return query.getResultList();
+    }
+    
+    @GET
+    @Path("findByUserid/{userid}")
+    @Produces({"application/json"})
+    public List<Consumptiontable> findByUserid(@PathParam("userid") Integer userid) {
+        Query query = em.createNamedQuery("Consumptiontable.findByUserid");
+        query.setParameter("userid", userid);
+        return query.getResultList();
+    }
+    
+    @GET
     @Path("findByFoodIdName/{foodid}/{foodname}")
     @Produces({"application/json"})
     public List<Consumptiontable> findByFid(@PathParam("foodid") Integer foodid, @PathParam("foodname") String foodname) {
@@ -113,6 +131,23 @@ public class ConsumptiontableFacadeREST extends AbstractFacade<Consumptiontable>
         q.setParameter("foodid", foodid);
         q.setParameter("foodname", foodname);
         return q.getResultList();
+    }
+    
+    @GET
+    @Path("getCalPerDay/{userid}/{cdate}")
+    @Produces({"application/json"})
+    public String getCalPerDay( @PathParam("userid") Integer userid, @PathParam("cdate") String cdate) throws ParseException {
+        TypedQuery<Consumptiontable> q = em.createQuery("SELECT c FROM Consumptiontable c WHERE c.userid.id = :userid AND c.cdate = :cdate", Consumptiontable.class);
+        q.setParameter("userid", userid);
+        Date cdate2=new SimpleDateFormat("yyyy-MM-dd").parse(cdate);
+        q.setParameter("cdate", cdate2);
+        Double totalCal = 0.0;
+        Double calPerFood =0.0;
+        for(Consumptiontable c : q.getResultList()){
+            calPerFood = c.getFoodid().getCalamount() * (c.getServingamount() * 1.0 / c.getFoodid().getServingamount());
+            totalCal += calPerFood;
+        }
+        return String.valueOf(totalCal);    
     }
     
     @GET
@@ -124,7 +159,6 @@ public class ConsumptiontableFacadeREST extends AbstractFacade<Consumptiontable>
         query.setParameter("foodname", foodname);
         return query.getResultList();
     }
-    
     
     @GET
     @Path("{from}/{to}")

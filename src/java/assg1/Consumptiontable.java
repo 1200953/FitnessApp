@@ -32,6 +32,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Consumptiontable.findAll", query = "SELECT c FROM Consumptiontable c")
     , @NamedQuery(name = "Consumptiontable.findById", query = "SELECT c FROM Consumptiontable c WHERE c.id = :id")
+    , @NamedQuery(name = "Consumptiontable.findByFoodid", query = "SELECT c FROM Consumptiontable c WHERE c.foodid.id = :foodid")
+    , @NamedQuery(name = "Consumptiontable.findByUserid", query = "SELECT c FROM Consumptiontable c WHERE c.userid.id = :userid")
     , @NamedQuery(name = "Consumptiontable.findByFidAName", query = "SELECT c FROM Consumptiontable c WHERE c.foodid.id = :foodid AND c.foodid.foodname = :foodname")
     , @NamedQuery(name = "Consumptiontable.findByCdate", query = "SELECT c FROM Consumptiontable c WHERE c.cdate = :cdate")
     , @NamedQuery(name = "Consumptiontable.findByServingunit", query = "SELECT c FROM Consumptiontable c WHERE c.servingunit = :servingunit")
